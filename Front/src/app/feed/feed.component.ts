@@ -14,6 +14,8 @@ export class FeedComponent {
   usuario: any = []
   urlservices: any = "http://192.168.1.39:8080/"
   looged: any = false;
+  socket: any = []
+
   constructor() { }
 
   ngOnInit(): void {
@@ -58,6 +60,62 @@ export class FeedComponent {
   }
 
 
+  abrirSocket = () => {
+    let url = this.urlservices + "Noticias";
+    if (this.socket.activate != true) {
+      return;
+    }
+    axios.get(url).then(
+      response => {
+
+
+        switch (this.socket.tipo) {
+          case "comentario":
+
+            this.noticias.forEach((element: any, index: any) => {
+              if (element.identificador == this.socket.id) {
+                if (element.comentarios.length != response.data[index].comentarios.length) {
+                  element.comentarios = response.data[index].comentarios;
+                }
+              }
+            }
+            );
+
+
+            break;
+          case "respuesta":
+            this.noticias.forEach((element: any, index: any) => {
+
+              element.comentarios.forEach((comentario: any, index2: any) => {
+                if (comentario.identificador == this.socket.id) {
+                  if (comentario.respuestas.length != response.data[index].comentarios[index2].respuestas.length) {
+                    comentario.respuestas = response.data[index].comentarios[index2].respuestas;
+                  }
+                }
+              }
+              );
+
+            }
+            );
+            break;
+          default:
+            break;
+        }
+
+      }
+    ).catch(
+      error => {
+        console.log(error);
+      }
+    )
+
+  }
+
+  intervalo = setInterval(() => {
+    this.abrirSocket();
+  }, 5000);
+
+
   comentar = (id: any) => {
 
     let divname = "comentarios" + id;
@@ -67,8 +125,18 @@ export class FeedComponent {
 
       if (comments.hidden == true) {
         comments.hidden = false;
+        this.socket = {
+          "tipo": "comentario",
+          "id": id,
+          "activate": true
+        }
       } else {
         comments.hidden = true;
+        this.socket = {
+          "tipo": "comentario",
+          "id": id,
+          "activate": false
+        }
       }
 
     }
@@ -81,7 +149,15 @@ export class FeedComponent {
     const comments = document.getElementById(divname);
     if (comments != null) {
 
+      this.socket = {
+        "tipo": "comentario",
+        "id": id,
+        "activate": false
+      }
+
       comments.hidden = true;
+
+
 
     }
 
@@ -97,8 +173,18 @@ export class FeedComponent {
 
       if (comments.hidden == true) {
         comments.hidden = false;
+        this.socket = {
+          "tipo": "respuesta",
+          "id": id_comentario,
+          "activate": true
+        }
       } else {
         comments.hidden = true;
+        this.socket = {
+          "tipo": "respuesta",
+          "id": id_comentario,
+          "activate": false
+        }
       }
 
     }
@@ -121,7 +207,7 @@ export class FeedComponent {
 
     Swal.fire({
       title: '<div class="text-center">Nueva Noticia</div><hr>',
-      html: '<div class="container"><div class="row"><div class="col-auto"><img src="https://scontent-qro1-2.xx.fbcdn.net/v/t39.30808-1/356819733_1328765421073458_5159895953506304381_n.jpg?stp=dst-jpg_p200x200&_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_ohc=ap2yD2jh6CQAX9wHWW_&_nc_ht=scontent-qro1-2.xx&oh=00_AfDzyU2ggeSucXiaiigqdZKK7WyPghlfayp-P-zElktm9g&oe=65521C29" alt="mdo" width="32" height="32" class="rounded-circle"></div><div class="col">' +
+      html: '<div class="container"><div class="row"><div class="col-auto"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAH0AAAB9CAMAAAC4XpwXAAAANlBMVEX///+ZmZmTk5OWlpaQkJDk5OT8/Py8vLzExMT39/fZ2dmmpqaurq7MzMzu7u6hoaG1tbXT09MwSnMzAAADsklEQVRoge1a65KrIAyuEPCCVPv+L7va1l0vJCSI7Zk5fDM7+6f4Qe6B3G4FBQUFBQUFBf89bGs639QzGt+Z1n6O2vh+UKCU0jOm/wDV6M0HmNuuB9C62kNrgL5rL+U2Y6WOzH87qMZJAtdowXaOoF424LpL2DsHEeoXv3Jddu47j/sJcPes3LaGmMw354c6o/jNoATcT/4hmwP6gIdF6fUjC/ckdTH3jCzSt71U6gtUf5q+HeRSX6CHk7HvDPlpenuKfKY/IXzbnyM/p/uaNLgpq83JlY5Dqk4l94SraXDezOeyxjtqA+DTyA3xTdWvYpk1lFfqpKhHWZzeH8gTv02yPErpx+OYCuXXjZz8jis9KEtCTyBPuA79GoQVadDtaicl7/BvYT5U4/sVVjvW4XLEomeL68rJDC/h6NThlezw+NEJ9yUMT6R5Q3gbsQxfpCQhZ8SdtyeW4UlJj3zylohcVNbAFV9V/Ezf4YInA1dDrOPbHZHWk9kpjW1BZdZUyQOXHI+ZFe07eHRG4/MRRLqcgIetllqmuJmOrOYIz+3IXTMVbwfqI4T50DUos8ggssUMNFsTFcFzHc/jI19BD9+Ty7hmR8Sa12fCVSpVAT+X8eKNj7WNwXwZ23OleKV1E21g1LE3f0Q7XWZxSUWsN2DXILVjvMcno6SIfSqf/Z/p3z1eTl/CPkm/Gh/mPuExVqz7hazs880cqOcf8+cZ2fUO2dijNq9Bu7FZY3QaYuJn2jzt71q5xhxDtjUN2Uiz/Z2MG7oPUC8b6CkNMGt6qn+MXEEaoutmxnk8x0FcdQ26WPFynD0lO7zEYPZyWJXAEx12j8AtasN1Hfv+JdzOMU0eqWkFPXiwAWbXtKF6nhmpXghd+bDr+aDiBeRTM3v4gKCXOcYbYft//ICgjzu0BeJ7n2NXI7it3vfvwqMfDy/p3w9OI75nb3cdiejuwm4lJzL4F3bSk2luKzmx4Pc+L/zA9r5Oy6867+uza+F93XbvCc8rG8XLZbfSvCBS/GEdscT3tOsaQ+QuC1Zml3BHvQrWJ9kTPGb9NpHG/kue9ipmMrEnvkY/4ITo6sXek9+if1Wv5FhWJr/HZXiL1Gfeob/6DvvlN+gvv79/efZgQvLcRQbu23dnTm50axqGyjdvI541mppdm3XUTDBnpVXmOasZneMZ/xUzZjfmfJ26aL5uhhkrwv7fs4UX4jlXGRKBun6u8oV5phTmPej3UCnA8JmZ0je+OE9bUFBQUFBQUPCv4gc9WiRPrOkbtgAAAABJRU5ErkJggg=="      alt="mdo" width="32" height="32" class="rounded-circle"></div><div class="col">' +
         ' <p class="text-left"><b> Flavio Urdiales Mena' + '</b></p></div></div></div>' +
         '<textarea id="txtnota" class="form-control mt-2" placeholder="Alguna nueva noticia?" style="border: none; border-bottom: 1px solid #ced4da; border-radius: 0px;"></textarea>',
       confirmButtonText: 'Publicar',
@@ -166,8 +252,6 @@ export class FeedComponent {
 
   comentarNota = async (id: any) => {
     let url = this.urlservices + "Noticias/comentario";
-
-
 
     if (this.usuario.idUsuario == null || this.usuario.idUsuario == "" || this.usuario.idUsuario == undefined) {
       Swal.fire({
