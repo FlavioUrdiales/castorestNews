@@ -1,0 +1,128 @@
+<div class="container mb-5 card">
+    <div class="row justify-content-center">
+
+
+        <div class="col-md-10 col-lg-10 mt-3 mb-3">
+
+            <!--AGREGAR NUEVA NOTICIA-->
+
+
+            <div class="col-md-12 col-lg-12 mt-3 mb-3" id="nuevaNota" *ngIf="usuario.interno">
+                <div class="row">
+                    <div class="col-auto">
+                        <img src="https://scontent-qro1-2.xx.fbcdn.net/v/t39.30808-1/356819733_1328765421073458_5159895953506304381_n.jpg?stp=dst-jpg_p200x200&_nc_cat=106&ccb=1-7&_nc_sid=5f2048&_nc_ohc=ap2yD2jh6CQAX9wHWW_&_nc_ht=scontent-qro1-2.xx&oh=00_AfDzyU2ggeSucXiaiigqdZKK7WyPghlfayp-P-zElktm9g&oe=65521C29"
+                            alt="mdo" width="32" height="32" class="rounded-circle">
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="¿Qué estas pensando?" (click)="nuevaNota()"
+                            id="nuevaNota" style="border: none; border-bottom: 1px solid #ced4da; border-radius: 0px;">
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+        <div class="col-md-10 col-lg-10" id="feed" *ngFor="let item of noticias; let i = index;">
+            <!--  /*[{"identificador":1,"nota":"sadasdasdsdasdsadasdasd","fechaPublicacion":"2023-11-08 21:40:47","autor":"Flavio Urdiales Mena [Interno]","comentarios":[{"identificador":1,"comentario":"hola","fechaPublicacion":"2023-11-08 21:52:04","autor":"Flavio Urdiales Mena [Interno]","respuestas":[{"identificador":1,"respuesta":"jejeje","fechaPublicacion":"2023-11-08 21:53:43","autor":"Flavio Urdiales Mena [Interno]"},{"identificador":2,"respuesta":"como es eso","fechaPublicacion":"2023-11-08 22:06:52","autor":"Fernando Muñoz Rodriguez [Externo]"}]}]}]*/-->
+            <div class="card mb-3" id="nota{{item.identificador}}">
+                <div class="card-body">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAH0AAAB9CAMAAAC4XpwXAAAANlBMVEX///+ZmZmTk5OWlpaQkJDk5OT8/Py8vLzExMT39/fZ2dmmpqaurq7MzMzu7u6hoaG1tbXT09MwSnMzAAADsklEQVRoge1a65KrIAyuEPCCVPv+L7va1l0vJCSI7Zk5fDM7+6f4Qe6B3G4FBQUFBQUFBf89bGs639QzGt+Z1n6O2vh+UKCU0jOm/wDV6M0HmNuuB9C62kNrgL5rL+U2Y6WOzH87qMZJAtdowXaOoF424LpL2DsHEeoXv3Jddu47j/sJcPes3LaGmMw354c6o/jNoATcT/4hmwP6gIdF6fUjC/ckdTH3jCzSt71U6gtUf5q+HeRSX6CHk7HvDPlpenuKfKY/IXzbnyM/p/uaNLgpq83JlY5Dqk4l94SraXDezOeyxjtqA+DTyA3xTdWvYpk1lFfqpKhHWZzeH8gTv02yPErpx+OYCuXXjZz8jis9KEtCTyBPuA79GoQVadDtaicl7/BvYT5U4/sVVjvW4XLEomeL68rJDC/h6NThlezw+NEJ9yUMT6R5Q3gbsQxfpCQhZ8SdtyeW4UlJj3zylohcVNbAFV9V/Ezf4YInA1dDrOPbHZHWk9kpjW1BZdZUyQOXHI+ZFe07eHRG4/MRRLqcgIetllqmuJmOrOYIz+3IXTMVbwfqI4T50DUos8ggssUMNFsTFcFzHc/jI19BD9+Ty7hmR8Sa12fCVSpVAT+X8eKNj7WNwXwZ23OleKV1E21g1LE3f0Q7XWZxSUWsN2DXILVjvMcno6SIfSqf/Z/p3z1eTl/CPkm/Gh/mPuExVqz7hazs880cqOcf8+cZ2fUO2dijNq9Bu7FZY3QaYuJn2jzt71q5xhxDtjUN2Uiz/Z2MG7oPUC8b6CkNMGt6qn+MXEEaoutmxnk8x0FcdQ26WPFynD0lO7zEYPZyWJXAEx12j8AtasN1Hfv+JdzOMU0eqWkFPXiwAWbXtKF6nhmpXghd+bDr+aDiBeRTM3v4gKCXOcYbYft//ICgjzu0BeJ7n2NXI7it3vfvwqMfDy/p3w9OI75nb3cdiejuwm4lJzL4F3bSk2luKzmx4Pc+L/zA9r5Oy6867+uza+F93XbvCc8rG8XLZbfSvCBS/GEdscT3tOsaQ+QuC1Zml3BHvQrWJ9kTPGb9NpHG/kue9ipmMrEnvkY/4ITo6sXek9+if1Wv5FhWJr/HZXiL1Gfeob/6DvvlN+gvv79/efZgQvLcRQbu23dnTm50axqGyjdvI541mppdm3XUTDBnpVXmOasZneMZ/xUzZjfmfJ26aL5uhhkrwv7fs4UX4jlXGRKBun6u8oV5phTmPej3UCnA8JmZ0je+OE9bUFBQUFBQUPCv4gc9WiRPrOkbtgAAAABJRU5ErkJggg=="
+                        alt="mdo" width="32" height="32" class="rounded-circle">
+                    <span class="ms-2">{{item.autor}}</span>
+                    <span class="float-end text-muted" style="font-size: 12px;">{{item.fechaPublicacion}}</span>
+
+                    <p class="card-text mt-3">{{item.nota}}</p>
+
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-2">
+
+                            <a class="btn btn-light btn-sm" (click)="comentar(item.identificador)">
+                                <i class="bi bi-chat-left-text" style="color: red;"></i> Comentar
+                                ({{item.comentarios.length}})
+                            </a>
+
+                        </div>
+
+
+                    </div>
+
+                    <div id="comentarios{{item.identificador}}" class="mt-3" hidden>
+
+                        <hr>
+                        <div class="row">
+
+
+                            <div class="col">
+                                <span class="float-end text-muted" style="font-size: 12px; cursor: pointer;"
+                                    (click)="close(item.identificador)">Cerrar</span>
+                                <input type="text" class="form-control" placeholder="Escribe un comentario"
+                                    id="comentario{{item.identificador}}"
+                                    style="border: none; border-bottom: 1px solid #ced4da; border-radius: 0px;">
+                                <span class="float-end text-muted" style="font-size: 20px; cursor: pointer;"
+                                    (click)="comentarNota(item.identificador)"><i class="bi bi-send"
+                                        tooltip="Enviar"></i></span>
+                            </div>
+                            <hr class="mt-2">
+                            <div class="col-md-12 mt-3">
+                                <div class="row" *ngFor="let comentario of item.comentarios; let j = index;">
+
+                                    <span class="float-start text-muted"
+                                        style="font-size: 12px;">{{comentario.autor}}</span>
+                                    <br>
+                                    <p class="card-text mt-1">{{comentario.comentario}}</p>
+                                    <span class="float-end text-muted"
+                                        style="font-size: 12px; margin-top: -10px;">{{comentario.fechaPublicacion}}</span>
+                                    <span class="float-end text-muted" style="font-size: 12px; cursor: pointer;"
+                                        (click)="responder(comentario.identificador, item.identificador)">Responder
+                                        ({{comentario.respuestas.length}})</span>
+
+                                    <div class="col-md-6 mt-3"
+                                        id="respuestasnota{{item.identificador}}comentario{{comentario.identificador}}"
+                                        hidden>
+                                        <div class="row ms-5 mb-2"
+                                            *ngFor="let respuesta of comentario.respuestas; let k = index;">
+
+                                            <span class="float-start text-muted"
+                                                style="font-size: 12px;">{{respuesta.autor}}</span>
+                                            <br>
+                                            <p class="card-text mt-1">{{respuesta.respuesta}}</p>
+                                            <span class="float-end text-muted"
+                                                style="font-size: 12px; margin-top: -10px;">{{respuesta.fechaPublicacion}}</span>
+
+
+                                        </div>
+
+                                        <div class="row ms-5 mb-2">
+                                            <div class="col">
+
+                                                <input type="text" class="form-control" placeholder="Responder"
+                                                    id="respuesta{{item.identificador}}comentario{{comentario.identificador}}"
+                                                    style="border: none; border-bottom: 1px solid #ced4da; border-radius: 0px;">
+                                                <span class="float-end text-muted"
+                                                    style="font-size: 20px; cursor: pointer;"
+                                                    (click)="responderComentario(item.identificador, comentario.identificador)"><i
+                                                        class="bi bi-send" tooltip="Enviar"></i></span>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>
